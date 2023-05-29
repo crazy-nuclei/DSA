@@ -25,7 +25,7 @@ int query(int treeNode, int st, int en, int l, int r, vector<int> &tree ) {
         return tree[treeNode];
     }
 
-    if(st >= r || en <= l ) {
+    if(st > r || en < l ) {
         return 0; 
     }
 
@@ -36,8 +36,34 @@ int query(int treeNode, int st, int en, int l, int r, vector<int> &tree ) {
     return a+b;
 }
 
-int query_tree(vector<int> &tree, int l, int r, int n) {
-    return query(0, 0, n-1, l, r, tree);
+int query_tree(int l, int r, vector<int> &tree, vector<int> & arr) {
+    return query(0, 0, arr.size()-1, l, r, tree);
+}
+
+int update(int treeNode, int st, int en, int ind, int val, vector<int> &tree ) {
+    
+    if(st == en ) {
+        if(st == ind) {
+            tree[treeNode] = val;
+        }
+        return tree[treeNode];
+    }
+    
+    if(ind < st || ind > en) {
+        return tree[treeNode];
+    }
+
+    int mid = (st + en) /2 ;
+    int a = update(treeNode*2 +1, st, mid, ind, val, tree);
+    int b = update(treeNode*2 +2, mid+1, en, ind, val, tree);
+    tree[treeNode] = a+b;
+
+    return tree[treeNode];
+}
+
+void update_tree( int ind, int val, vector<int> &tree, vector<int> &arr) {
+    arr[ind] = val; 
+    update(0, 0, arr.size()-1, ind, val, tree);
 }
 
 int main () {
@@ -52,8 +78,10 @@ int main () {
 
     build_tree(arr, tree);
 
-    int ans = query_tree(tree, 1, 3, arr.size()- 1);
-
+    int ans = query_tree(1, 3, tree, arr);
+    cout << ans << endl;
+    update_tree( 2, 5, tree, arr );
+    ans = query_tree(1, 3, tree, arr);
     cout << ans << endl;
 }
 
@@ -61,3 +89,4 @@ int main () {
 5 
 1 2 3 4 5 
 */
+
