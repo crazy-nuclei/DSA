@@ -9,6 +9,7 @@
 #include <queue> 
 #include <list>
 #include <set>
+#include <unordered_set>
 
 // Additional headers...
 
