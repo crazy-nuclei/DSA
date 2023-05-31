@@ -26,8 +26,8 @@ void sol(vector<int> &nums, vector<vector<int>> &dp) {
 
     for(int i = 1; i < dp.size(); i++) {
         for(int j = 1; j < dp[0].size(); j++) {
-            if(nums[j] <= i) {
-                dp[i][j] = dp[i-nums[j]][j-1] || dp[i][j-1];
+            if(nums[j-1] <= i) {
+                dp[i][j] = dp[i-nums[j-1]][j-1] || dp[i][j-1];
             } 
             else {
                 dp[i][j] = dp[i][j-1];
