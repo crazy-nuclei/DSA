@@ -17,8 +17,15 @@ bool check(string s1, string s2, int i, int j) {
     return aa | bb;
 }
 
-bool mcm(string s1, string s2, int i, int j) {
+bool mcm(string s1, string s2, int i, int j, vector<vector<int>> &dp) {
     
+    if(dp[i][j] != -1) {
+        if(dp[i][j] == 1) {
+            return true;
+        }
+        else return false;
+    }
+
     if(i >= j) {
         if(s1[i] == s2[i]) {
             return true;
@@ -29,19 +36,19 @@ bool mcm(string s1, string s2, int i, int j) {
     }
 
     if(check(s1, s2, i, j)) {
-        return true;
+        return dp[i][j] = true;
     }
 
     bool ans = false;
     for(int k = i; k < j; k++) {
-        bool aa = mcm(s1, s2, i, k);
-        bool bb = mcm(s1, s2, k+1, j);
+        bool aa = mcm(s1, s2, i, k, dp);
+        bool bb = mcm(s1, s2, k+1, j, dp);
 
         ans = aa&bb;
         if(ans == true) break;
     }
 
-    return ans;
+    return dp[i][j] = ans;
 }
 
 void solve(string s1, string s2) {
@@ -49,7 +56,9 @@ void solve(string s1, string s2) {
         cout << "s2 is not the scrambled string of s1" << endl;
     }
 
-    bool ans = mcm(s1, s2, 0, s1.length()-1);
+    vector<vector<int>> dp(s1.length(), vector<int> (s1.length(), -1));
+
+    bool ans = mcm(s1, s2, 0, s1.length()-1, dp);
     
     if(ans) {
         cout << "s2 is scrambled string of s1" << endl;
